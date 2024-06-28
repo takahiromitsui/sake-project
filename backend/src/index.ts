@@ -1,7 +1,7 @@
 import express from 'express';
 import { connectToDatabase } from './driver/driver';
 
-import { DataLoaderFromAPIToMongoDB } from './services/data_loader';
+import { DataLoaderFromAPIToMongoDB } from './helpers/data_loader';
 
 const app = express();
 const PORT = process.env.PORT || 3000;
