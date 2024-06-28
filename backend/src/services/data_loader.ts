@@ -19,7 +19,19 @@ export class DataLoaderFromAPIToMongoDB {
 		}
 	}
 
-	// insert_data() {
+	async insert_data(itemName: string) {
+		try {
+			const response = await this.fetch_url();
+			const data = response[itemName]
 
-	// }
+			// Ensure data is an array
+			const itemsToInsert = Array.isArray(data) ? data : [data];
+
+			// Insert data into the collection
+			const insertResult = await this.collection.insertMany(itemsToInsert);
+			console.log(`Successfully inserted ${insertResult.insertedCount} items.`);
+		} catch (e) {
+			console.error(`Inserting data failed: ${e}`);
+		}
+	}
 }

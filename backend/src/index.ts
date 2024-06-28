@@ -11,8 +11,13 @@ async function startServer(dbName: string) {
 		const db = await connectToDatabase(dbName);
 		console.log('Connected to database successfully');
 		// Load data
-		const loader = new DataLoaderFromAPIToMongoDB(db, 'areas', 'https://muro.sakenowa.com/sakenowa-data/api/areas');
-		console.log(await loader.fetch_url())
+		const loader = new DataLoaderFromAPIToMongoDB(
+			db,
+			'areas',
+			'https://muro.sakenowa.com/sakenowa-data/api/areas'
+		);
+		// console.log(await loader.fetch_url())
+		// await loader.insert_data('areas');
 
 		app.listen(PORT, () => {
 			console.log(`Server is running on http://localhost:${PORT}`);
