@@ -1,39 +1,25 @@
+import { Request, Response } from 'express';
+
 import ApiError from '../helpers/api_error';
-import { Area } from '../models/area';
-import { Brand } from '../models/brand';
-import { Brewery } from '../models/brewery';
+import { logger } from '../helpers/logger';
+import { getBrandsByAreaName } from '../services/brands';
 
-export async function getBrandsByAreaName(areaName: string) {
+export const fetchBrandsByAreaName = async (req: Request, res: Response) => {
 	try {
-		const area = await Area.findOne({
-			en: areaName,
-		});
-
-		if (!area) {
-			return new ApiError(404, 'Area not Found');
-		} else {
-			const breweries = await Brewery.find({ area: area });
-			if (!breweries || breweries.length === 0) {
-				return new ApiError(404, 'Breweries not found for the given area');
-			}
-			const brands = await Brand.find({ brewery: { $in: breweries } })
-				.populate({
-					path: 'brewery',
-					populate: {
-						path: 'area',
-						model: 'Area',
-					},
-				})
-				.exec();
-			if (!brands || brands.length === 0) {
-				return new ApiError(
-					404,
-					'No brands found for the breweries in the specified area'
-				);
-			}
-			return brands;
+		const { areaName } = req.params;
+		const brands = await getBrandsByAreaName(areaName);
+		if (brands instanceof ApiError) {
+			logger.error(`${brands.status}: ${brands.message}`);
+			return res.status(brands.status).json({ message: brands.message });
 		}
+		logger.info('200: Success');
+		res.status(200).json({
+			brands: brands,
+		});
 	} catch (error) {
-		return new ApiError(500, 'Internal Server Error');
+		logger.info(`500: ${error}`);
+		res.status(500).json({
+			message: 'Internal server error',
+		});
 	}
-}
+};
