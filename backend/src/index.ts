@@ -1,26 +1,15 @@
 import express from 'express';
-import { connectToDatabase } from './driver/driver';
+import mongoose from 'mongoose';
 
-import { DataLoaderFromAPIToMongoDB } from './helpers/data_loader';
+import { connectionString } from './db/connection';
 
 const app = express();
 const PORT = process.env.PORT || 3000;
 
-const THIRD_PARTY_API = 'https://muro.sakenowa.com/sakenowa-data/api'
-
-async function startServer(dbName: string) {
+async function startServer() {
 	try {
-		const db = await connectToDatabase(dbName);
+		await mongoose.connect(connectionString);
 		console.log('Connected to database successfully');
-		// Load data
-		const loader = new DataLoaderFromAPIToMongoDB(
-			db,
-			'breweries',
-			THIRD_PARTY_API +'/breweries'
-		);
-		// console.log(await loader.fetch_url())
-		// await loader.insert_data('breweries');
-
 		app.listen(PORT, () => {
 			console.log(`Server is running on http://localhost:${PORT}`);
 		});
@@ -30,4 +19,4 @@ async function startServer(dbName: string) {
 	}
 }
 
-startServer('sake');
+startServer();
