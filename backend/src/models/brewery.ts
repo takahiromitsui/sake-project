@@ -12,9 +12,10 @@ const brewerySchema = new mongoose.Schema({
 	en: {
 		type: String,
 	},
-	areaId: {
-		type: Number,
+	area: {
+		type: mongoose.Schema.Types.ObjectId,
 		required: true,
+		ref: 'Area',
 	},
 });
 

@@ -23,7 +23,21 @@ async function loadBrewery() {
 		const data = await response.json();
 		const { breweries } = data;
 		await mongoose.connect(connectionString);
-		await Brewery.insertMany(breweries);
+
+		for (let brewery of breweries) {
+			const area = await Area.findOne({ id: brewery.areaId });
+			if (area) {
+				brewery.area = area
+			}
+		}
+		const chunkSize = 100;
+		const chunks = [];
+		for (let i = 0; i < breweries.length; i += chunkSize) {
+			chunks.push(breweries.slice(i, i + chunkSize));
+		}
+		for (const chunk of chunks) {
+			await Brewery.insertMany(chunk);
+		}
 		mongoose.connection.close();
 	} catch (e) {
 		console.log(e);
@@ -50,3 +64,5 @@ async function loadBrand() {
 		console.log(e);
 	}
 }
+
+loadBrewery();
