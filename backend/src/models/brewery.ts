@@ -8,7 +8,6 @@ const brewerySchema = new mongoose.Schema({
 	},
 	name: {
 		type: String,
-		required: true,
 	},
 	en: {
 		type: String,
@@ -19,4 +18,4 @@ const brewerySchema = new mongoose.Schema({
 	},
 });
 
-const Brewery = mongoose.model('Brewery', brewerySchema);
+export const Brewery = mongoose.model('Brewery', brewerySchema);
