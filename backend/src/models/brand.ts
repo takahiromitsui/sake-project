@@ -8,7 +8,6 @@ const brandSchema = new mongoose.Schema({
 	},
 	name: {
 		type: String,
-		required: true,
 	},
 	en: {
 		type: String,
@@ -19,4 +18,4 @@ const brandSchema = new mongoose.Schema({
 	},
 });
 
-const Brand = mongoose.model('Brand', brandSchema);
+export const Brand = mongoose.model('Brand', brandSchema);
