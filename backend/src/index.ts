@@ -38,12 +38,12 @@ app.get('/brands/:areaName', async (req: Request, res: Response) => {
 async function startServer() {
 	try {
 		await mongoose.connect(connectionString);
-		console.log('Connected to database successfully');
+		logger.info('Connected to database successfully');
 		app.listen(PORT, () => {
-			console.log(`Server is running on http://localhost:${PORT}`);
+			logger.info(`Server is running on http://localhost:${PORT}`);
 		});
 	} catch (error) {
-		console.error('Failed to connect to the database', error);
+		logger.info('Failed to connect to the database', error);
 		process.exit(1);
 	}
 }
