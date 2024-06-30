@@ -12,9 +12,10 @@ const brandSchema = new mongoose.Schema({
 	en: {
 		type: String,
 	},
-	breweryId: {
-		type: Number,
+	brewery: {
+		type: mongoose.Schema.Types.ObjectId,
 		required: true,
+		ref: 'Brewery',
 	},
 });
 
