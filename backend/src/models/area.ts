@@ -13,7 +13,8 @@ const areaSchema = new mongoose.Schema({
 	en: {
 		type: String,
 		required: true,
+		lowercase: true,
 	},
 });
 
-const Area = mongoose.model('Area', areaSchema);
+export const Area = mongoose.model('Area', areaSchema);

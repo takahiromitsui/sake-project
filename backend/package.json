@@ -4,7 +4,8 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "dev": "ts-node src/index.ts"
+    "dev": "ts-node src/index.ts",
+    "load_area": "ts-node src/helpers/area_loader.ts"
   },
   "author": "",
   "license": "ISC",
