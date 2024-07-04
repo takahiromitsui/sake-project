@@ -1,15 +1,13 @@
 'use client';
+import LeafletMap from '@/components/leaflet-map';
 import dynamic from 'next/dynamic';
 
 export default function Home() {
-	const LazyMap = dynamic(() => import('@/components/leaflet-map'), {
-		ssr: false,
-	});
 	const LazyMarkers = dynamic(() => import('@/components/markers'), {
 		ssr: false,
 	});
 	return (
-		<LazyMap
+		<LeafletMap
 			style={{
 				height: '100vh',
 				width: '100vw',
@@ -25,6 +23,6 @@ export default function Home() {
 			scrollWheelZoom={false}
 		>
 			<LazyMarkers />
-		</LazyMap>
+		</LeafletMap>
 	);
 }
