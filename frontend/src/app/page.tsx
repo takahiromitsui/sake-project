@@ -8,10 +8,15 @@ export default function Home() {
 		<MapContainer
 			style={{
 				height: '100vh',
-				zIndex: 0,
+				width: '100vw',
 			}}
-			center={[36.00, 138.00]}
-			zoom={4}
+			bounds={[
+				[20.358, 122.934], // Southwest corner (approx)
+				[45.551, 153.986], // Northeast corner (approx)
+			]}
+			center={[36.2048, 138.2529]}
+			zoom={5}
+			minZoom={5}
 			scrollWheelZoom={false}
 		>
 			<TileLayer
