@@ -1,11 +1,15 @@
 'use client';
+
 import LeafletMap from '@/components/leaflet-map';
 import dynamic from 'next/dynamic';
 
 export default function Home() {
-	const LazyMarkers = dynamic(() => import('@/components/markers'), {
-		ssr: false,
-	});
+	const LazyMarkers = dynamic(
+		async () => await import('@/components/markers'),
+		{
+			ssr: false,
+		}
+	);
 	return (
 		<LeafletMap
 			style={{
