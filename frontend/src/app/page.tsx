@@ -1,32 +1,15 @@
 'use client';
-import { Marker, Popup } from 'react-leaflet';
-import { Icon } from 'leaflet';
-import LeafletMap from '@/components/leaflet-map';
-import MarkerCluster from '@/components/marker-cluster';
+import dynamic from 'next/dynamic';
 
 export default function Home() {
-	const markers: [number, number][] = [
-		[35.6895, 139.6917], // Tokyo
-		[34.6937, 135.5023], // Osaka
-		[35.1815, 136.9066], // Nagoya
-		[43.0686, 141.3508], // Sapporo
-		[35.6894, 139.6917], // Tokyo (again)
-	];
-	const popups: string[] = [
-		'Tokyo',
-		'Osaka',
-		'Nagoya',
-		'Sapporo',
-		'Tokyo (again)',
-	];
-	const iconURL = '/assets/marker-icon.png';
-
-	const customIcon = new Icon({
-		iconUrl: iconURL,
-		iconSize: [38, 38],
+	const LazyMap = dynamic(() => import('@/components/leaflet-map'), {
+		ssr: false,
+	});
+	const LazyMarkers = dynamic(() => import('@/components/markers'), {
+		ssr: false,
 	});
 	return (
-		<LeafletMap
+		<LazyMap
 			style={{
 				height: '100vh',
 				width: '100vw',
@@ -41,13 +24,7 @@ export default function Home() {
 			maxZoom={10}
 			scrollWheelZoom={false}
 		>
-			<MarkerCluster>
-				{markers.map((position, index) => (
-					<Marker key={index} position={position} icon={customIcon}>
-						<Popup>{popups[index]}</Popup>
-					</Marker>
-				))}
-			</MarkerCluster>
-		</LeafletMap>
+			<LazyMarkers />
+		</LazyMap>
 	);
 }
