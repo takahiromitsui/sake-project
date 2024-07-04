@@ -2,6 +2,7 @@
 import { Marker, Popup } from 'react-leaflet';
 import { Icon } from 'leaflet';
 import LeafletMap from '@/components/leaflet-map';
+import MarkerCluster from '@/components/marker-cluster';
 
 export default function Home() {
 	const markers: [number, number][] = [
@@ -24,14 +25,6 @@ export default function Home() {
 		iconUrl: iconURL,
 		iconSize: [38, 38],
 	});
-	// const createCustomClusterIcon = (cluster) => {
-	// 	const count = cluster.getChildCount();
-	// 	return new divIcon({
-	// 		html: `<div class='cluster-icon>${count}</div>`,
-	// 		className: 'cluster-marker-cluster',
-	// 		iconSize: point(33,33, true),
-	// 	});
-	// }
 	return (
 		<LeafletMap
 			style={{
@@ -45,13 +38,16 @@ export default function Home() {
 			center={[36.2048, 138.2529]}
 			zoom={5}
 			minZoom={5}
+			maxZoom={10}
 			scrollWheelZoom={false}
 		>
-			{markers.map((position, index) => (
-				<Marker key={index} position={position} icon={customIcon}>
-					<Popup>{popups[index]}</Popup>
-				</Marker>
-			))}
+			<MarkerCluster>
+				{markers.map((position, index) => (
+					<Marker key={index} position={position} icon={customIcon}>
+						<Popup>{popups[index]}</Popup>
+					</Marker>
+				))}
+			</MarkerCluster>
 		</LeafletMap>
 	);
 }

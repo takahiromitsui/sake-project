@@ -9,6 +9,7 @@
     "lint": "next lint"
   },
   "dependencies": {
+    "@changey/react-leaflet-markercluster": "4.0.0-rc1",
     "leaflet": "^1.9.4",
     "next": "14.2.4",
     "react": "^18",
