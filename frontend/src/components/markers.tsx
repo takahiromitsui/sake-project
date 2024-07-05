@@ -15,11 +15,9 @@ type Props = {
 export default function Markers({ props }: Props) {
 	const prefecture = prefectureMap[props as keyof typeof prefectureMap];
 	const { status, data: brands } = useQuery({
+		enabled: !!prefecture?.name,
 		queryKey: ['brands', prefecture?.name],
-		queryFn: async () => {
-			if (!prefecture?.name) return;
-			return await getBrands(prefecture.name);
-		},
+		queryFn: async () =>await getBrands(prefecture.name),
 	});
 
 	const iconURL = '/assets/marker-icon.png';

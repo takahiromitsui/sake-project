@@ -13,6 +13,7 @@ import { prefectureDisplays } from '@/lib/prefectures';
 import { useState } from 'react';
 import Markers from '@/components/markers';
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
+import { ReactQueryDevtools } from '@tanstack/react-query-devtools';
 
 export default function Home() {
 	const queryClient = new QueryClient();
@@ -22,6 +23,7 @@ export default function Home() {
 
 	return (
 		<QueryClientProvider client={queryClient}>
+			<ReactQueryDevtools />
 			<div className='flex'>
 				<div className='w-1/4  pt-4 pl-4 pr-4'>
 					<Select
