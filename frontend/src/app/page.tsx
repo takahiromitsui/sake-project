@@ -11,8 +11,13 @@ import {
 import LeafletMap from '@/components/leaflet-map';
 import dynamic from 'next/dynamic';
 import { prefectures } from '@/lib/prefectures';
+import { useState } from 'react';
 
 export default function Home() {
+	const [selectedPrefecture, setSelectedPrefecture] = useState<
+		(typeof prefectures)[0] | null
+	>(null);
+	console.log(selectedPrefecture);
 	const LazyMarkers = dynamic(
 		async () => await import('@/components/markers'),
 		{
@@ -22,7 +27,7 @@ export default function Home() {
 	return (
 		<div className='flex'>
 			<div className='w-1/4  pt-4 pl-4 pr-4'>
-				<Select>
+				<Select onValueChange={setSelectedPrefecture}>
 					<SelectTrigger className='w-[180px]'>
 						<SelectValue placeholder='Select a location' />
 					</SelectTrigger>
@@ -30,7 +35,7 @@ export default function Home() {
 						<SelectGroup>
 							<SelectLabel>Location</SelectLabel>
 							{prefectures.map(prefecture => (
-								<SelectItem key={prefecture.name} value={prefecture.name}>
+								<SelectItem key={prefecture.name} value={prefecture}>
 									{prefecture.display}
 								</SelectItem>
 							))}
@@ -53,7 +58,7 @@ export default function Home() {
 				maxZoom={10}
 				scrollWheelZoom={false}
 			>
-				<LazyMarkers />
+				<LazyMarkers props={selectedPrefecture} />
 			</LeafletMap>
 		</div>
 	);
