@@ -10,6 +10,7 @@
   },
   "dependencies": {
     "@changey/react-leaflet-markercluster": "4.0.0-rc1",
+    "@radix-ui/react-select": "^2.1.1",
     "class-variance-authority": "^0.7.0",
     "clsx": "^2.1.1",
     "leaflet": "^1.9.4",
