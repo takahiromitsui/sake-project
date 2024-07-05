@@ -9,31 +9,33 @@ import {
 	SelectValue,
 } from '@/components/ui/select';
 import LeafletMap from '@/components/leaflet-map';
-import { prefectures } from '@/lib/prefectures';
+import { prefectureDisplays } from '@/lib/prefectures';
 import { useState } from 'react';
 import Markers from '@/components/markers';
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
 
 export default function Home() {
 	const queryClient = new QueryClient();
-	const [selectedPrefecture, setSelectedPrefecture] = useState<
-		(typeof prefectures)[0] | null
-	>(null);
+	const [selectedPrefecture, setSelectedPrefecture] = useState<string | null>(
+		null
+	);
 
 	return (
 		<QueryClientProvider client={queryClient}>
 			<div className='flex'>
 				<div className='w-1/4  pt-4 pl-4 pr-4'>
-					<Select onValueChange={setSelectedPrefecture}>
+					<Select
+						onValueChange={(value: string) => setSelectedPrefecture(value)}
+					>
 						<SelectTrigger className='w-[180px]'>
 							<SelectValue placeholder='Select a location' />
 						</SelectTrigger>
 						<SelectContent>
 							<SelectGroup>
 								<SelectLabel>Location</SelectLabel>
-								{prefectures.map(prefecture => (
-									<SelectItem key={prefecture.name} value={prefecture}>
-										{prefecture.display}
+								{prefectureDisplays.map(display => (
+									<SelectItem key={display} value={display}>
+										{display}
 									</SelectItem>
 								))}
 							</SelectGroup>
@@ -55,7 +57,9 @@ export default function Home() {
 					maxZoom={10}
 					scrollWheelZoom={false}
 				>
-					<Markers props={selectedPrefecture} />
+					{selectedPrefecture === null ? null : (
+						<Markers props={selectedPrefecture} />
+					)}
 				</LeafletMap>
 			</div>
 		</QueryClientProvider>

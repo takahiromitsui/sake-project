@@ -4,21 +4,21 @@ import { Marker, Popup } from 'react-leaflet';
 import 'leaflet/dist/leaflet.css';
 import { Icon } from 'leaflet';
 import MarkerCluster from '@/components/marker-cluster';
-import { prefectures } from '@/lib/prefectures';
+import { prefectureMap } from '@/lib/prefectures';
 import { useQuery } from '@tanstack/react-query';
 import { getBrands } from '@/api/brands';
 
 type Props = {
-	props: null | (typeof prefectures)[0];
+	props: string;
 };
 
 export default function Markers({ props }: Props) {
+	const prefecture = prefectureMap[props as keyof typeof prefectureMap];
 	const { status, data: brands } = useQuery({
-		queryKey: ['brands', props?.name],
+		queryKey: ['brands', prefecture?.name],
 		queryFn: async () => {
-			if (props?.name) {
-				return await getBrands(props.name);
-			}
+			if (!prefecture?.name) return;
+			return await getBrands(prefecture.name);
 		},
 	});
 
@@ -29,7 +29,14 @@ export default function Markers({ props }: Props) {
 		iconSize: [38, 38],
 	});
 
-	if (status === 'pending' || status === 'error' || !brands || !props) {
+	if (
+		status === 'pending' ||
+		status === 'error' ||
+		!brands ||
+		!props ||
+		!prefecture.coordinate[0] ||
+		!prefecture.coordinate[1]
+	) {
 		return <></>;
 	}
 
@@ -39,7 +46,10 @@ export default function Markers({ props }: Props) {
 				<Marker
 					key={brand.id}
 					position={
-						[props.coordinate[0], props.coordinate[1]] as [number, number]
+						[prefecture.coordinate[0], prefecture.coordinate[1]] as [
+							number,
+							number
+						]
 					}
 					icon={customIcon}
 				>
