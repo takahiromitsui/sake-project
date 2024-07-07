@@ -24,6 +24,7 @@ func main() {
 	log.Println("Server running on port", port)
 	srv := &http.Server{
 		Addr: port,
+		Handler: routes(),
 	}
 	err = srv.ListenAndServe()
 	if err != nil {
