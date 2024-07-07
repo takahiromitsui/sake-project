@@ -19,6 +19,7 @@ type Brewery struct {
 	Name  string             `bson:"name" json:"name"`
 	En    string             `bson:"en" json:"en"`
 	Area  primitive.ObjectID `bson:"area" json:"area"`
+	AreaDetails *Area         `bson:"areaDetails,omitempty" json:"areaDetails,omitempty"`
 }
 
 // Brand struct definition

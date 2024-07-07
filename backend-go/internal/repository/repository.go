@@ -28,6 +28,8 @@ func (r *Repository) GetBrandsByAreaName(areaName string) ([]models.Brand, error
 	if err != nil {
 		return nil, err
 	}
+	AreaMap := make(map[primitive.ObjectID]models.Area)
+	AreaMap[area.MongoID] = area
 	
 	var breweries []models.Brewery
 	cursor, err := r.client.Database("sake").Collection("breweries").Find(ctx, bson.M{"area": area.MongoID})
@@ -47,6 +49,7 @@ func (r *Repository) GetBrandsByAreaName(areaName string) ([]models.Brand, error
 	breweryIds := make([]primitive.ObjectID, len(breweries))
 	breweryMap := make(map[primitive.ObjectID]models.Brewery)
 	for i, brewery := range breweries {
+		brewery.AreaDetails = &area
 		breweryIds[i] = brewery.MongoID
 		breweryMap[brewery.MongoID] = brewery
 	}
