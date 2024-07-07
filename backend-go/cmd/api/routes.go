@@ -1,12 +1,14 @@
 package main
 
-import "net/http"
+import (
+	"net/http"
+
+	"github.com/takahiromitsui/sake-project/internal/handlers"
+)
 
 
-func routes() *http.ServeMux {
+func routes(handlers *handlers.Handlers) *http.ServeMux {
 	mux := http.NewServeMux()
-	mux.HandleFunc(("GET /"), func(w http.ResponseWriter, r *http.Request) {
-		w.Write([]byte("Hello, World!"))
-	})
+	mux.HandleFunc(("GET /"), handlers.Home)
 	return mux
 }

@@ -8,6 +8,8 @@ import (
 	"time"
 
 	"github.com/joho/godotenv"
+	"github.com/takahiromitsui/sake-project/internal/handlers"
+	"github.com/takahiromitsui/sake-project/internal/repository"
 	"go.mongodb.org/mongo-driver/mongo"
 	"go.mongodb.org/mongo-driver/mongo/options"
 )
@@ -22,9 +24,11 @@ func main() {
 	defer cancel()
 	defer client.Disconnect(ctx)
 	log.Println("Server running on port", port)
+	repo := repository.NewRepository(client)
+	handlers := handlers.NewHandlers(repo)
 	srv := &http.Server{
 		Addr: port,
-		Handler: routes(),
+		Handler: routes(handlers),
 	}
 	err = srv.ListenAndServe()
 	if err != nil {
