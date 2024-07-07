@@ -28,4 +28,5 @@ type Brand struct {
 	Name    string             `bson:"name" json:"name"`
 	En      string             `bson:"en" json:"en"`
 	Brewery primitive.ObjectID `bson:"brewery" json:"brewery"`
+	BreweryDetails *Brewery           `bson:"breweryDetails,omitempty" json:"breweryDetails,omitempty"`
 }
