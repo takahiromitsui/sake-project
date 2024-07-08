@@ -17,7 +17,7 @@ export default function Markers({ props }: Props) {
 	const { status, data: brands } = useQuery({
 		enabled: !!prefecture?.name,
 		queryKey: ['brands', prefecture?.name],
-		queryFn: async () =>await getBrands(prefecture.name),
+		queryFn: async () => await getBrands(prefecture.name),
 	});
 
 	const iconURL = '/assets/marker-icon.png';
@@ -52,9 +52,15 @@ export default function Markers({ props }: Props) {
 					icon={customIcon}
 				>
 					<Popup>
-						<div>
-							<h1>{brand.name}</h1>
-							<p>{brand.brewery.name}</p>
+						<div className='bg-white rounded-lg shadow-lg p-6'>
+							<h1 className='text-xl font-bold mb-3 capitalize'>
+								{brand.name} ( {brand.en} )
+							</h1>
+							<p className='text-gray-700 capitalize'>
+								Brewery: {brand.breweryDetails.name}
+								<br />
+								Area: {brand.breweryDetails.areaDetails.en}
+							</p>
 						</div>
 					</Popup>
 				</Marker>
