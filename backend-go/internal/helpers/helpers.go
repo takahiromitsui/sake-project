@@ -5,7 +5,9 @@ import (
 	"encoding/json"
 	"fmt"
 	"os"
+	"path/filepath"
 
+	"github.com/takahiromitsui/sake-project/internal/models"
 	"go.mongodb.org/mongo-driver/bson"
 	"go.mongodb.org/mongo-driver/mongo"
 	"go.mongodb.org/mongo-driver/mongo/options"
@@ -50,6 +52,32 @@ func ExportJson(client *mongo.Client, collectionName string) (error){
 			return err
 		}
 		fmt.Println("Exported", fileName)
+	}
+	return nil
+}
+
+func BrandEnUpdate(client *mongo.Client, fileName string) (error) {
+	p:= filepath.Join("internal", "data", fileName)
+	file, err := os.Open(p)
+	if err != nil {
+		fmt.Println("Error opening file")
+		return err
+	}
+	defer file.Close()
+	var brands []models.Brand
+	err = json.NewDecoder(file).Decode(&brands)
+	if err != nil {
+		fmt.Println("Error decoding file")
+		return err
+	}
+	collection := client.Database("sake").Collection("brands")
+	for _, brand := range brands {
+		fmt.Println(brand.ID, brand.En)
+		_, err = collection.UpdateOne(context.TODO(), bson.M{"id": brand.ID}, bson.M{"$set": bson.M{"en": brand.En}})
+		if err != nil {
+			fmt.Println("Error updating document")
+			return err
+		}
 	}
 	return nil
 }
