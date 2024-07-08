@@ -25,6 +25,7 @@ type BrandJson struct {
 }
 
 func (h *Handlers) Brands(w http.ResponseWriter, r *http.Request) {
+	w.Header().Set("Access-Control-Allow-Origin", "*")
 	area := r.PathValue("area")
 	brands, err := h.repo.GetBrandsByAreaName(area)
 	if err != nil {
