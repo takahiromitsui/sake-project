@@ -8,8 +8,8 @@ import (
 type Area struct {
 	MongoID primitive.ObjectID `bson:"_id,omitempty" json:"mongoId,omitempty"`
 	ID   int 								`bson:"id" json:"id"`
-	Name string             `bson:"name"`
-	En   string             `bson:"en"`
+	Name string             `bson:"name" json:"name"`
+	En   string             `bson:"en" json:"en"`
 }
 
 // Brewery struct definition

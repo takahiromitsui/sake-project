@@ -12,16 +12,20 @@ type Brewery = {
 	_id: string;
 	id: number;
 	name: string;
+	en: string;
 	area: Area;
 	__v: number;
+	areaDetails: Area;
 };
 
 type Brand = {
 	_id: string;
 	id: number;
 	name: string;
+	en: string;
 	brewery: Brewery;
 	__v: number;
+	breweryDetails: Brewery;
 };
 
 export async function getBrands(place: string) {
