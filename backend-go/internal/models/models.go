@@ -31,3 +31,15 @@ type Brand struct {
 	Brewery primitive.ObjectID `bson:"brewery" json:"brewery"`
 	BreweryDetails *Brewery           `bson:"breweryDetails,omitempty" json:"breweryDetails,omitempty"`
 }
+
+type Flavor struct {
+	MongoID primitive.ObjectID `bson:"_id,omitempty" json:"mongoId,omitempty"`
+	F1 float64 `bson:"f1" json:"f1"`
+	F2 float64 `bson:"f2" json:"f2"`
+	F3 float64 `bson:"f3" json:"f3"`
+	F4 float64 `bson:"f4" json:"f4"`
+	F5 float64 `bson:"f5" json:"f5"`
+	F6 float64 `bson:"f6" json:"f6"`
+	Brand primitive.ObjectID `bson:"brand" json:"brand"`
+	BrandDetails *Brand `bson:"brandDetails,omitempty" json:"brandDetails,omitempty"`
+}

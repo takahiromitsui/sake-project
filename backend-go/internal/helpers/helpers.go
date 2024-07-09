@@ -4,9 +4,11 @@ import (
 	"context"
 	"encoding/json"
 	"fmt"
+	// "log"
 	"os"
 	"path/filepath"
 
+	// "github.com/joho/godotenv"
 	"github.com/takahiromitsui/sake-project/internal/models"
 	"go.mongodb.org/mongo-driver/bson"
 	"go.mongodb.org/mongo-driver/mongo"
@@ -81,3 +83,23 @@ func BrandEnUpdate(client *mongo.Client, fileName string) (error) {
 	}
 	return nil
 }
+
+// func main() {
+// 	err := godotenv.Load()
+// 	if err != nil {
+//     log.Fatal("Error loading .env file")
+// 		return
+//   }
+
+// 	uri := os.Getenv("DB_CONN_STR")
+// 	// ctx, cancel := context.WithTimeout(context.Background(), 10*time.Second)
+// 	// defer cancel()
+// 	client, err := mongo.Connect(context.TODO(), options.Client().ApplyURI(uri))
+// 	if err != nil {
+// 		log.Fatal("Error connecting to MongoDB")
+// 		return
+// 	}
+// 	// helpers.ExportJson(client, "brands")
+// 	BrandEnUpdate(client, "brands_0.json")
+// 	defer client.Disconnect(context.TODO())
+// }
