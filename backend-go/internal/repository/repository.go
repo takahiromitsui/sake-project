@@ -64,10 +64,31 @@ func (r *Repository) GetBrandsByAreaName(areaName string) ([]models.Brand, error
 	if err = cursor.All(ctx, &brands); err != nil {
 		return nil, err
 	}
-	
+	brandIds := make([]primitive.ObjectID, len(brands))
 	for i, brand := range brands {
+		brandIds[i] = brand.MongoID
 		if brewery, found := breweryMap[brand.Brewery]; found {
 			brands[i].BreweryDetails = &brewery 
+		}
+	}
+	var flavors []models.Flavor
+	flavorsCursor, err := r.client.Database("sake").Collection("flavors").Find(ctx, bson.M{"brand": bson.M{"$in": brandIds}})
+	if err != nil {
+		return nil, err
+	}
+	defer flavorsCursor.Close(ctx)
+	if err = flavorsCursor.All(ctx, &flavors); err != nil {
+		return nil, err
+	}
+	flavorMap := make(map[primitive.ObjectID]models.Flavor)
+	for _, flavor := range flavors {
+		flavorMap[flavor.Brand] = flavor
+	}
+	for i, brand := range brands {
+		if flavor, found := flavorMap[brand.MongoID]; found {
+			brands[i].FlavorDetails = &flavor
+		} else {
+			brands[i].FlavorDetails = nil
 		}
 	}
 	

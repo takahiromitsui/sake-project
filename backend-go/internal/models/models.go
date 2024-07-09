@@ -30,6 +30,7 @@ type Brand struct {
 	En      string             `bson:"en" json:"en"`
 	Brewery primitive.ObjectID `bson:"brewery" json:"brewery"`
 	BreweryDetails *Brewery           `bson:"breweryDetails,omitempty" json:"breweryDetails,omitempty"`
+	FlavorDetails *Flavor             `bson:"flavorDetails,omitempty" json:"flavorDetails,omitempty"`
 }
 
 type Flavor struct {
@@ -41,5 +42,4 @@ type Flavor struct {
 	F5 float64 `bson:"f5" json:"f5"`
 	F6 float64 `bson:"f6" json:"f6"`
 	Brand primitive.ObjectID `bson:"brand" json:"brand"`
-	BrandDetails *Brand `bson:"brandDetails,omitempty" json:"brandDetails,omitempty"`
 }
