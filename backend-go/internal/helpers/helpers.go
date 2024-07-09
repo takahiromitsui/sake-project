@@ -4,6 +4,9 @@ import (
 	"context"
 	"encoding/json"
 	"fmt"
+	"log"
+	"net/http"
+
 	// "log"
 	"os"
 	"path/filepath"
@@ -11,6 +14,7 @@ import (
 	// "github.com/joho/godotenv"
 	"github.com/takahiromitsui/sake-project/internal/models"
 	"go.mongodb.org/mongo-driver/bson"
+	"go.mongodb.org/mongo-driver/bson/primitive"
 	"go.mongodb.org/mongo-driver/mongo"
 	"go.mongodb.org/mongo-driver/mongo/options"
 )
@@ -81,6 +85,72 @@ func BrandEnUpdate(client *mongo.Client, fileName string) (error) {
 			return err
 		}
 	}
+	return nil
+}
+type FlavorResponse struct {
+	FlavorCharts []struct {
+		BrandId int     `json:"brandId"`
+		F1      float64 `json:"f1"`
+		F2      float64 `json:"f2"`
+		F3      float64 `json:"f3"`
+		F4      float64 `json:"f4"`
+		F5      float64 `json:"f5"`
+		F6      float64 `json:"f6"`
+	} `json:"flavorCharts"`
+}
+
+func InsertFlavors(client *mongo.Client) (error) {
+	url := "https://muro.sakenowa.com/sakenowa-data/api/flavor-charts"
+	resp, err := http.Get(url)
+	if err != nil {
+		fmt.Println("Error fetching data")
+		return err
+	}
+	defer resp.Body.Close()
+	var flavorResponse FlavorResponse
+	if err := json.NewDecoder(resp.Body).Decode(&flavorResponse); err != nil {
+		fmt.Println("Error decoding data")
+		return err
+	}
+	brandUdMap := make(map[int]primitive.ObjectID)
+	brandsCollection := client.Database("sake").Collection("brands")
+	flavorsCollection := client.Database("sake").Collection("flavors")
+	cursor, err := brandsCollection.Find(context.TODO(), bson.D{})
+	if err != nil {
+		fmt.Println("Error finding documents")
+		return err
+	}
+	defer cursor.Close(context.TODO())
+	for cursor.Next(context.TODO()) {
+		var brand models.Brand
+		if err = cursor.Decode(&brand); err != nil {
+			fmt.Println("Error decoding document")
+			return err
+		}
+		brandUdMap[brand.ID] = brand.MongoID
+	}
+	var flavors []interface{}
+	for _, fc := range  flavorResponse.FlavorCharts {
+		if mongoId, ok := brandUdMap[fc.BrandId]; ok {
+			flavors = append(flavors, models.Flavor{
+				F1: fc.F1,
+				F2: fc.F2,
+				F3: fc.F3,
+				F4: fc.F4,
+				F5: fc.F5,
+				F6: fc.F6,
+				Brand: mongoId,
+			})
+		}
+	}
+	if len(flavors) > 0 {
+		_, err = flavorsCollection.InsertMany(context.TODO(), flavors)
+		if err != nil{
+			log.Fatal("Error inserting documents")
+			return err
+		}
+	}
+	fmt.Println("Inserted", len(flavors), "flavors")
 	return nil
 }
 
